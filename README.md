@@ -8,6 +8,9 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 * Obico-Server running on Jetson Nano
 * Home Assistant v2024.5.3
 
+## Example Telegram Notification:
+![Telegam Notification](https://raw.githubusercontent.com/johnc2k/Obico2HomeAssistant/main/Telegram%20Notification.PNG)
+
 ## Configuration:
 * Change the `webhook_id` to [something unique](https://www.uuidgenerator.net/)
 * In the `PrintFailure` function, change the `device_id` to your printer camera
