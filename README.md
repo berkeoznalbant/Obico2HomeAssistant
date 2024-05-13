@@ -1,5 +1,5 @@
 # Obico2HomeAssistant
-Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to Home Assistant using Web Hook automation
+Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to Home Assistant using Webhook automation
 
 ## My Setup:
 * Bambu Labs P1S v01.05.02.00 (in LAN mode)
@@ -13,3 +13,7 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 * In the `PrintFailure` function, change the `device_id` to your printer camera
 * You may want to change the path of the camera snapshot
 * I personally use Telegram for my notifications, you may wish to change the notifications to your liking
+* Configure Obico-Server to use `Webhook` and point it at your Home Assistant `https://hass.lan/api/webhook/CHANGE-ME`
+
+## Issues:
+* Occasionally receive double notifications for prints starting?
