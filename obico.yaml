@@ -131,7 +131,9 @@
           metadata: {}
           data:
             message: |
-              Payload {{ trigger.json }}
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Printer cooled down
             title: "*Obico Server:* {{ trigger.json.printer.name }}"
             parse_mode: markdown
     ### HeaterTargetReached ###
@@ -144,6 +146,8 @@
           metadata: {}
           data:
             message: |
-              Payload {{ trigger.json }}
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Printer heated up
             title: "*Obico Server:* {{ trigger.json.printer.name }}"
             parse_mode: markdown
