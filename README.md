@@ -11,4 +11,5 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 ## Configuration:
 * Change the `webhook_id` to [something unique](https://www.uuidgenerator.net/)
 * In the `PrintFailure` function, change the `device_id` to your printer camera
+* You may want to change the path of the camera snapshot
 * I personally use Telegram for my notifications, you may wish to change the notifications to your liking
