@@ -1,0 +1,149 @@
+- id: "1234567890"
+  alias: Obico Webhook
+  description: "Receive Obico server Notifications"
+  trigger:
+    - platform: webhook
+      allowed_methods:
+        - PUT
+        - POST
+      local_only: true
+      webhook_id: "CHANGE-ME"
+
+  condition: []
+  action:
+    ### FilamentChange ###
+    - alias: FilamentChange
+      if:
+        - condition: template
+          value_template: "{{ 'FilamentChange' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Printer requires attention
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### PrintCancelled ###
+    - alias: PrintCancelled
+      if:
+        - condition: template
+          value_template: "{{ 'PrintCancelled' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Print has been cancelled
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### PrintFailure ###
+    - alias: PrintFailure
+      if:
+        - condition: template
+          value_template: "{{ 'PrintFailure' in trigger.json.event.type }}"
+      then:
+        - service: camera.snapshot
+          metadata: {}
+          data:
+            filename: /config/www/obico/print_issue.jpg
+          target:
+            device_id: 4a142b40831df007d2dc0064affd814e
+        - service: telegram_bot.send_photo
+          metadata: {}
+          data:
+            file: /config/www/obico/print_issue.jpg
+            caption: Print has detected a potential failure
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### PrintDone ###
+    - alias: PrintDone
+      if:
+        - condition: template
+          value_template: "{{ 'PrintDone' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Print has completed
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### PrintPaused ###
+    - alias: PrintPaused
+      if:
+        - condition: template
+          value_template: "{{ 'PrintPaused' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Print has paused
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### PrintResumed ###
+    - alias: PrintResumed
+      if:
+        - condition: template
+          value_template: "{{ 'PrintResumed' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Print has resumed
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### PrintStarted ###
+    - alias: PrintStarted
+      if:
+        - condition: template
+          value_template: "{{ 'PrintStarted' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
+
+              Print has started
+              Filename: `{{ trigger.json.print.filename }}`
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### HeaterCooledDown ###
+    - alias: HeaterCooledDown
+      if:
+        - condition: template
+          value_template: "{{ 'HeaterCooledDown' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Payload {{ trigger.json }}
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
+    ### HeaterTargetReached ###
+    - alias: HeaterTargetReached
+      if:
+        - condition: template
+          value_template: "{{ 'HeaterTargetReached' in trigger.json.event.type }}"
+      then:
+        - service: telegram_bot.send_message
+          metadata: {}
+          data:
+            message: |
+              Payload {{ trigger.json }}
+            title: "*Obico Server:* {{ trigger.json.printer.name }}"
+            parse_mode: markdown
