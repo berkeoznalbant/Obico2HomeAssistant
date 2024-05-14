@@ -13,7 +13,7 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 
 ## Configuration:
 * Homeassistant: Settings => Automations => New Automation
-* Enable Yaml Mode in the top right corner
+* Enable YAML Mode in the top right corner
 * Paste Code from `obico.yaml` into automation
 * Change the `webhook_id` to [something unique](https://www.uuidgenerator.net/)
 * In the `PrintFailure` function, change the `device_id` to your printer camera
