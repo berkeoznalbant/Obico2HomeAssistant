@@ -8,8 +8,7 @@
         - POST
       local_only: true
       webhook_id: "CHANGE-ME"
-
-  condition: []
+condition: []
   action:
     - choose:
         ### FilamentChange ###
@@ -25,7 +24,6 @@
                   Printer requires attention!
                 parse_mode: markdown
                 title: "*Obico Server:* {{ trigger.json.printer.name }}"
-
         ### PrintCancelled ###
         - conditions:
             - condition: template
@@ -79,7 +77,7 @@
           sequence:
             - action: telegram_bot.send_message
               data:
-                message: |
+                message: |-
                   Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                   Print has paused
@@ -92,7 +90,7 @@
           sequence:
             - action: telegram_bot.send_message
               data:
-                message: |
+                message: |-
                   Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                   Print has resumed
@@ -122,7 +120,7 @@
           sequence:
             - action: telegram_bot.send_message
               data:
-                message: |
+                message: |-
                   Payload {{ trigger.json }}
                 parse_mode: markdown
                 title: "*Obico Server:* {{ trigger.json.printer.name }}"
@@ -133,7 +131,7 @@
           sequence:
             - action: telegram_bot.send_message
               data:
-                message: |
+                message: |-
                   Payload {{ trigger.json }}
                 parse_mode: markdown
                 title: "*Obico Server:* {{ trigger.json.printer.name }}"
