@@ -7,8 +7,8 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 * Obico-Server running on Mini PC with Intel N100 Processor
 * Home Assistant 
 
-## Example Telegram Notification:
-![Telegam Notification](https://raw.githubusercontent.com/johnc2k/Obico2HomeAssistant/main/Telegram%20Notification.PNG)
+## Example App Notification:
+<a href="url"><img src="https://github.com/user-attachments/assets/9d59ec4e-826d-4a46-b1eb-d219778c66f4" width="500" ></a>
 
 ## Configuration:
 * Homeassistant: Settings => Automations => New Automation
