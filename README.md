@@ -12,7 +12,7 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 
 ## Configuration:
 * Homeassistant: Settings => Automations => Blueprints
-* Click "IMPORT BLUEPRINT" in the bottom right corner.
+* Click "Import Blueprint" in the bottom right corner.
 * Paste the following address: https://github.com/berkeoznalbant/Obico2HomeAssistant/blob/main/obico_blueprint.yaml
 * Click preview and then click "Import Blueprint".
 * Then choose the "Obico Webhook" from the blueprint list.
