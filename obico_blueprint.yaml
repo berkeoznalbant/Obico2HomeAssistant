@@ -36,8 +36,8 @@ action:
               message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
-                Printer requires attention!
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+                Printer requires attention! Time to change filament!
+              title: "Obico Server: {{ trigger.json.printer.name }}"
       - conditions:
           - condition: template
             value_template: "{{ 'PrintCancelled' in trigger.json.event.type }}"
@@ -47,8 +47,8 @@ action:
               message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
-                Print has been cancelled
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+                Print has been cancelled!
+              title: "Obico Server: {{ trigger.json.printer.name }}"
       - conditions:
           - condition: template
             value_template: "{{ 'PrintDone' in trigger.json.event.type }}"
@@ -58,8 +58,8 @@ action:
               message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
-                Print has completed
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+                Print has completed!
+              title: "Obico Server: {{ trigger.json.printer.name }}"
       - conditions:
           - condition: template
             value_template: "{{ 'PrintFailure' in trigger.json.event.type }}"
@@ -84,7 +84,7 @@ action:
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Print has paused
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+              title: "Obico Server: {{ trigger.json.printer.name }}"
       - conditions:
           - condition: template
             value_template: "{{ 'PrintResumed' in trigger.json.event.type }}"
@@ -95,7 +95,7 @@ action:
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Print has resumed
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+              title: "Obico Server: {{ trigger.json.printer.name }}"
       - conditions:
           - condition: template
             value_template: "{{ 'PrintStarted' in trigger.json.event.type }}"
@@ -107,20 +107,22 @@ action:
 
                 Print has started
                 Filename: `{{ trigger.json.print.filename }}`
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+              title: "Obico Server: {{ trigger.json.printer.name }}"
       - conditions:
           - condition: template
             value_template: "{{ 'HeaterCooledDown' in trigger.json.event.type }}"
         sequence:
           - service: notify.notify
             data:
-              message: Payload {{ trigger.json }}
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+              message: Heater cooled down.
+              title: "Obico Server: {{ trigger.json.printer.name }}"
       - conditions:
           - condition: template
             value_template: "{{ 'HeaterTargetReached' in trigger.json.event.type }}"
         sequence:
           - service: notify.notify
             data:
-              message: Payload {{ trigger.json }}
-              title: "*Obico Server:* {{ trigger.json.printer.name }}"
+              message: Heater target reached.
+              title: "Obico Server: {{ trigger.json.printer.name }}"
+mode: parallel
+max: 2
