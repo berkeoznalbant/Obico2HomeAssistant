@@ -11,14 +11,12 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 <a href="url"><img src="https://github.com/user-attachments/assets/9d59ec4e-826d-4a46-b1eb-d219778c66f4" width="500" ></a>
 
 ## Configuration:
-* Homeassistant: Settings => Automations => New Automation
-* Enable YAML Mode in the top right corner
-* Paste Code from `obico.yaml` into automation
-* Change the `webhook_id` to [something unique](https://www.uuidgenerator.net/)
-* In the `PrintFailure` function, change the `device_id` to your printer camera
-* You may want to change the path of the camera snapshot
-* I personally use Home Assistant companion app for my notifications, you may wish to change the notifications to your liking
-* Configure Obico-Server to use `Webhook` and point it at your Home Assistant `https://[HOMEASSISTANT URL HERE]/api/webhook/[WEBHOOK ID FROM AUTOMATION HERE]`
-
-## Issues:
-* Occasionally receive double notifications for prints starting?
+* Homeassistant: Settings => Automations => Blueprints
+* Click "IMPORT BLUEPRINT" in the bottom right corner.
+* Paste the following address: https://github.com/berkeoznalbant/Obico2HomeAssistant/blob/main/obico_blueprint.yaml
+* Click preview and then click "Import Blueprint".
+* Then choose the "Obico Webhook" from the blueprint list.
+* Create a webhook ID for the automation that should be unique and hard to guess.
+* In Obico go to Preference => Notifications => Webhook
+* Paste the following link to Webhook URL section: http://<HOMEASSISTANT_IP>:<HOMEASSISTANT_PORT>/api/webhook/<WEBHOOK_ID>
+* Get back to Home Assistant and choose the camera entity for the 3D printer.
