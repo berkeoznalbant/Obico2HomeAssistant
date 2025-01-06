@@ -1,23 +1,39 @@
-alias: Obico Webhook
-description: Receive Obico server Notifications
-triggers:
-  - trigger: webhook
+blueprint:
+  name: Obico Webhook
+  description: Receive Obico server notifications via webhook and notify a mobile app.
+  domain: automation
+  input:
+    webhook_id:
+      name: Webhook ID
+      description: The webhook ID to listen for.
+      selector:
+        text:
+    camera_entity:
+      name: Camera Entity
+      description: Camera entity for capturing snapshots (used for print failures).
+      selector:
+        entity:
+          domain: camera
+
+trigger:
+  - platform: webhook
+    webhook_id: !input webhook_id
     allowed_methods:
       - POST
       - PUT
     local_only: true
-    webhook_id: "CHANGE-ME"
-conditions: []
-actions:
+
+condition: []
+
+action:
   - choose:
       - conditions:
           - condition: template
             value_template: "{{ 'FilamentChange' in trigger.json.event.type }}"
         sequence:
-          - action: notify.mobile_app_sm_g780g
-            metadata: {}
+          - service: notify.notify
             data:
-              message: |-
+              message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Printer requires attention!
@@ -26,9 +42,9 @@ actions:
           - condition: template
             value_template: "{{ 'PrintCancelled' in trigger.json.event.type }}"
         sequence:
-          - action: notify.mobile_app_sm_g780g
+          - service: notify.notify
             data:
-              message: |-
+              message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Print has been cancelled
@@ -38,9 +54,9 @@ actions:
             value_template: "{{ 'PrintDone' in trigger.json.event.type }}"
         sequence:
           - delay: "00:05:00"
-          - action: notify.mobile_app_sm_g780g
+          - service: notify.notify
             data:
-              message: |-
+              message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Print has completed
@@ -49,13 +65,12 @@ actions:
           - condition: template
             value_template: "{{ 'PrintFailure' in trigger.json.event.type }}"
         sequence:
-          - action: camera.snapshot
+          - service: camera.snapshot
+            target:
+              entity_id: !input camera_entity
             data:
               filename: /config/www/obico/print_issue.jpg
-            target:
-              entity_id: camera.192_168_1_30
-          - action: notify.mobile_app_sm_g780g
-            metadata: {}
+          - service: notify.notify
             data:
               message: Attention! Possible failure during print!
               data:
@@ -64,9 +79,9 @@ actions:
           - condition: template
             value_template: "{{ 'PrintPaused' in trigger.json.event.type }}"
         sequence:
-          - action: notify.mobile_app_sm_g780g
+          - service: notify.notify
             data:
-              message: |-
+              message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Print has paused
@@ -75,9 +90,9 @@ actions:
           - condition: template
             value_template: "{{ 'PrintResumed' in trigger.json.event.type }}"
         sequence:
-          - action: notify.mobile_app_sm_g780g
+          - service: notify.notify
             data:
-              message: |-
+              message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Print has resumed
@@ -86,9 +101,9 @@ actions:
           - condition: template
             value_template: "{{ 'PrintStarted' in trigger.json.event.type }}"
         sequence:
-          - action: notify.mobile_app_sm_g780g
+          - service: notify.notify
             data:
-              message: |-
+              message: >
                 Date: {{ now().strftime("%Y-%m-%d %H:%M:%S") }}
 
                 Print has started
@@ -98,7 +113,7 @@ actions:
           - condition: template
             value_template: "{{ 'HeaterCooledDown' in trigger.json.event.type }}"
         sequence:
-          - action: notify.mobile_app_sm_g780g
+          - service: notify.notify
             data:
               message: Payload {{ trigger.json }}
               title: "*Obico Server:* {{ trigger.json.printer.name }}"
@@ -106,7 +121,7 @@ actions:
           - condition: template
             value_template: "{{ 'HeaterTargetReached' in trigger.json.event.type }}"
         sequence:
-          - action: notify.mobile_app_sm_g780g
+          - service: notify.notify
             data:
               message: Payload {{ trigger.json }}
               title: "*Obico Server:* {{ trigger.json.printer.name }}"
