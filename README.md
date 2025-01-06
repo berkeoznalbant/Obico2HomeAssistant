@@ -3,7 +3,7 @@ Send [Obico-Server](https://www.obico.io/docs/server-guides/) notifications to H
 
 ## My Setup:
 * Ender 3 Pro
-* [OctoPrint](https://octoprint.org/) with Obico add-in
+* [OctoPrint](https://octoprint.org/) running on Raspberry Pi 3B+ with Obico add-in
 * Obico-Server running on Mini PC with Intel N100 Processor
 * Home Assistant 
 
