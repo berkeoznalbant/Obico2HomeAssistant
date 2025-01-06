@@ -53,7 +53,6 @@ action:
           - condition: template
             value_template: "{{ 'PrintDone' in trigger.json.event.type }}"
         sequence:
-          - delay: "00:05:00"
           - service: notify.notify
             data:
               message: >
