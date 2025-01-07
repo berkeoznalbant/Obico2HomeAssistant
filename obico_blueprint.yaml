@@ -26,6 +26,11 @@ trigger:
 condition: []
 
 action:
+  - service: camera.snapshot
+    target:
+      entity_id: !input camera_entity
+    data:
+      filename: /config/www/obico/print_issue.jpg
   - choose:
       - conditions:
           - condition: template
@@ -38,6 +43,8 @@ action:
 
                 Printer requires attention! Time to change filament!
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              data:
+                image: /media/local/obico/print_issue.jpg
       - conditions:
           - condition: template
             value_template: "{{ 'PrintCancelled' in trigger.json.event.type }}"
@@ -49,6 +56,8 @@ action:
 
                 Print has been cancelled!
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              data:
+                image: /media/local/obico/print_issue.jpg
       - conditions:
           - condition: template
             value_template: "{{ 'PrintDone' in trigger.json.event.type }}"
@@ -60,15 +69,12 @@ action:
 
                 Print has completed!
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              data:
+                image: /media/local/obico/print_issue.jpg
       - conditions:
           - condition: template
             value_template: "{{ 'PrintFailure' in trigger.json.event.type }}"
         sequence:
-          - service: camera.snapshot
-            target:
-              entity_id: !input camera_entity
-            data:
-              filename: /config/www/obico/print_issue.jpg
           - service: notify.notify
             data:
               message: Attention! Possible failure during print!
@@ -85,6 +91,8 @@ action:
 
                 Print has paused
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              data:
+                image: /media/local/obico/print_issue.jpg
       - conditions:
           - condition: template
             value_template: "{{ 'PrintResumed' in trigger.json.event.type }}"
@@ -96,6 +104,8 @@ action:
 
                 Print has resumed
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              data:
+                image: /media/local/obico/print_issue.jpg
       - conditions:
           - condition: template
             value_template: "{{ 'PrintStarted' in trigger.json.event.type }}"
@@ -108,6 +118,8 @@ action:
                 Print has started
                 Filename: `{{ trigger.json.print.filename }}`
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              data:
+                image: /media/local/obico/print_issue.jpg
       - conditions:
           - condition: template
             value_template: "{{ 'HeaterCooledDown' in trigger.json.event.type }}"
