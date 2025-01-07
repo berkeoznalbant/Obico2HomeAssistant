@@ -14,7 +14,30 @@ blueprint:
       selector:
         entity:
           domain: camera
-
+    printer_pause_button:
+      name: Printer Pause Button Entity
+      description: Octoprint pause button entity
+      selector:
+        entity:
+          filter:
+            - integration: octoprint
+              domain: button
+    printer_resume_button:
+      name: Printer Resume Button Entity
+      description: Octoprint resume button entity
+      selector:
+        entity:
+          filter:
+            - integration: octoprint
+              domain: button
+    printer_stop_button:
+      name: Printer Stop Button Entity
+      description: Octoprint stop button entity
+      selector:
+        entity:
+          filter:
+            - integration: octoprint
+              domain: button
 trigger:
   - platform: webhook
     webhook_id: !input webhook_id
@@ -22,7 +45,22 @@ trigger:
       - POST
       - PUT
     local_only: true
-
+  # Notification action triggers
+  - platform: event
+    event_type: mobile_app_notification_action
+    id: OCTOPRINT_PAUSE_PRINTING
+    event_data:
+      action: OCTOPRINT_PAUSE_PRINTING
+  - platform: event
+    event_type: mobile_app_notification_action
+    id: OCTOPRINT_RESUME_PRINTING
+    event_data:
+      action: OCTOPRINT_RESUME_PRINTING
+  - platform: event
+    event_type: mobile_app_notification_action
+    id: OCTOPRINT_STOP_PRINTING
+    event_data:
+      action: OCTOPRINT_STOP_PRINTING
 condition: []
 
 action:
@@ -45,6 +83,11 @@ action:
               title: "Obico Server: {{ trigger.json.printer.name }}"
               data:
                 image: /media/local/obico/print_issue.jpg
+                actions:
+                  - action: OCTOPRINT_RESUME_PRINTING
+                    title: Resume Printing
+                  - action: OCTOPRINT_STOP_PRINTING
+                    title: Stop Printing
       - conditions:
           - condition: template
             value_template: "{{ 'PrintCancelled' in trigger.json.event.type }}"
@@ -80,6 +123,13 @@ action:
               message: Attention! Possible failure during print!
               data:
                 image: /media/local/obico/print_issue.jpg
+                actions:
+                  - action: OCTOPRINT_RESUME_PRINTING
+                    title: Resume Printing
+                  - action: OCTOPRINT_PAUSE_PRINTING
+                    title: Pause Printing
+                  - action: OCTOPRINT_STOP_PRINTING
+                    title: Stop Printing
       - conditions:
           - condition: template
             value_template: "{{ 'PrintPaused' in trigger.json.event.type }}"
@@ -93,6 +143,11 @@ action:
               title: "Obico Server: {{ trigger.json.printer.name }}"
               data:
                 image: /media/local/obico/print_issue.jpg
+                actions:
+                  - action: OCTOPRINT_RESUME_PRINTING
+                    title: Resume Printing
+                  - action: OCTOPRINT_STOP_PRINTING
+                    title: Stop Printing
       - conditions:
           - condition: template
             value_template: "{{ 'PrintResumed' in trigger.json.event.type }}"
@@ -106,6 +161,11 @@ action:
               title: "Obico Server: {{ trigger.json.printer.name }}"
               data:
                 image: /media/local/obico/print_issue.jpg
+                actions:
+                  - action: OCTOPRINT_PAUSE_PRINTING
+                    title: Pause Printing
+                  - action: OCTOPRINT_STOP_PRINTING
+                    title: Stop Printing
       - conditions:
           - condition: template
             value_template: "{{ 'PrintStarted' in trigger.json.event.type }}"
@@ -120,6 +180,11 @@ action:
               title: "Obico Server: {{ trigger.json.printer.name }}"
               data:
                 image: /media/local/obico/print_issue.jpg
+                actions:
+                  - action: OCTOPRINT_PAUSE_PRINTING
+                    title: Pause Printing
+                  - action: OCTOPRINT_STOP_PRINTING
+                    title: Stop Printing
       - conditions:
           - condition: template
             value_template: "{{ 'HeaterCooledDown' in trigger.json.event.type }}"
@@ -128,6 +193,11 @@ action:
             data:
               message: Heater cooled down.
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              actions:
+                - action: OCTOPRINT_PAUSE_PRINTING
+                  title: Pause Printing
+                - action: OCTOPRINT_STOP_PRINTING
+                  title: Stop Printing
       - conditions:
           - condition: template
             value_template: "{{ 'HeaterTargetReached' in trigger.json.event.type }}"
@@ -136,5 +206,36 @@ action:
             data:
               message: Heater target reached.
               title: "Obico Server: {{ trigger.json.printer.name }}"
+              actions:
+                - action: OCTOPRINT_PAUSE_PRINTING
+                  title: Pause Printing
+                - action: OCTOPRINT_STOP_PRINTING
+                  title: Stop Printing
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+          - OCTOPRINT_PAUSE_PRINTING
+      sequence:
+        - service: button.press
+          data: { }
+          target:
+            entity_id: !input printer_pause_button
+    - conditions:
+      - condition: trigger
+        id: OCTOPRINT_RESUME_PRINTING
+      sequence:
+        - service: button.press
+          data: { }
+          target:
+            entity_id: !input printer_resume_button
+    - conditions:
+      - condition: trigger
+        id: OCTOPRINT_STOP_PRINTING
+      sequence:
+        - service: button.press
+          data: { }
+          target:
+            entity_id: !input printer_stop_button
 mode: parallel
 max: 2
